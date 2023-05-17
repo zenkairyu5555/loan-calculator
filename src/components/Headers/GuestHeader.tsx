@@ -1,5 +1,6 @@
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
+import Box from '@mui/material/Box';
 import LogoIcon from '../../icons/Logo';
 
 export default function Header() {
@@ -14,7 +15,9 @@ export default function Header() {
       }}
     >
       <Toolbar>
-        <LogoIcon />
+        <Box sx={{ cursor: 'pointer' }}>
+          <LogoIcon />
+        </Box>
       </Toolbar>
     </AppBar>
   );

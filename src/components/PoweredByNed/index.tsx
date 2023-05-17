@@ -14,7 +14,7 @@ const Root = styled('div')({
   borderColor: '#c4c4c4',
   borderTop: 'none',
   position: 'fixed',
-  top: '40%',
+  top: '60%',
   left: '-54px',
   display: 'flex',
   alignItems: 'center',
@@ -22,12 +22,15 @@ const Root = styled('div')({
   fontWeight: 500,
   fontSize: '12px',
   lineHeight: '14px',
+  zIndex: 100,
+  background: '#ffffff',
 });
 
 const PoweredByNed: React.FC<{}> = () => {
   return (
     <Root>
-      Powered by &nbsp;<LogoIcon />
+      Powered by &nbsp;
+      <LogoIcon />
     </Root>
   );
 };
