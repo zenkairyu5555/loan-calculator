@@ -7,6 +7,7 @@ import {
   Stack,
 } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
+import styled from '@emotion/styled';
 
 import SelectVariants from '../SelectVariants';
 import BinIcon from '../../icons/Bin';
@@ -28,6 +29,18 @@ type IPurpose = {
   description: string;
   amount: number;
 };
+
+const StyledTypography = styled(Typography)(() => ({
+  fontWeight: 600,
+  fontSize: '1.125rem',
+  lineHeight: '24px',
+}));
+
+const StyledStack = styled(Stack)(() => ({
+  [theme.breakpoints.down(700)]: {
+    width: '100%',
+  },
+}));
 
 const FundPurposeList = () => {
   const [purposeValue, setPurposeValue] = useState<string>();
@@ -137,66 +150,34 @@ const FundPurposeList = () => {
               },
             }}
           >
-            <Stack
+            <StyledStack
               sx={{
                 width: '157px',
                 paddingLeft: '9px',
-                [theme.breakpoints.down(700)]: {
-                  width: '100%',
-                },
               }}
             >
-              <Typography
-                variant="body1"
-                sx={{
-                  fontWeight: 600,
-                  fontSize: '1.125rem',
-                  lineHeight: '24px',
-                }}
-              >
-                {p.purpose}
-              </Typography>
-            </Stack>
-            <Stack
+              <StyledTypography variant="body1">{p.purpose}</StyledTypography>
+            </StyledStack>
+            <StyledStack
               flex={1}
               sx={{
                 paddingLeft: '9px',
-                [theme.breakpoints.down(700)]: {
-                  width: '100%',
-                },
               }}
             >
-              <Typography
-                variant="body1"
-                sx={{
-                  fontWeight: 600,
-                  fontSize: '1.125rem',
-                  lineHeight: '24px',
-                }}
-              >
+              <StyledTypography variant="body1">
                 {p.description}
-              </Typography>
-            </Stack>
-            <Stack
+              </StyledTypography>
+            </StyledStack>
+            <StyledStack
               sx={{
                 width: '123px',
                 paddingLeft: '9px',
-                [theme.breakpoints.down(700)]: {
-                  width: '100%',
-                },
               }}
             >
-              <Typography
-                variant="body1"
-                sx={{
-                  fontWeight: 600,
-                  fontSize: '1.125rem',
-                  lineHeight: '24px',
-                }}
-              >
+              <StyledTypography variant="body1">
                 {p.description}
-              </Typography>
-            </Stack>
+              </StyledTypography>
+            </StyledStack>
             <IconButton
               onClick={handleRemove(p.id)}
               sx={{ width: '46px', height: '46px' }}
