@@ -136,7 +136,6 @@ export const getTransfers = (
   revenueSharedFrequency: string,
   config: ILoanConfig | undefined,
 ) => {
-
   if (
     loanAmount &&
     revenueAmount &&
@@ -151,11 +150,10 @@ export const getTransfers = (
     ) as number;
 
     const repaymentRate = getRepaymentRate(revenueAmount, loanAmount) as number;
-    
-    let hey = totalRevenueShare * time / revenueAmount / repaymentRate * 100;
 
-    hey =  Math.ceil(hey);
-    return hey;
+    return Math.ceil(
+      ((totalRevenueShare * time) / revenueAmount / repaymentRate) * 100,
+    );
   }
   return '';
 };

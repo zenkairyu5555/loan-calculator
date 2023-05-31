@@ -15,7 +15,7 @@ import FundPurposeList from '../FundPurposeList';
 import SelectVariants from '../SelectVariants';
 import theme from '../../theme';
 import PanelTitle from '../PanelTitle';
-import { ILoanConfig } from '../../types';
+import { ILoanConfig, IOptionState } from '../../types';
 import {
   getRepaymentRate,
   formatNumber,
@@ -32,11 +32,11 @@ const OptionList = ({
   setState,
 }: {
   config: ILoanConfig | undefined;
-  state: Record<string, unknown>;
-  setState: Dispatch<SetStateAction<Record<string, unknown>>>;
+  state: IOptionState;
+  setState: Dispatch<SetStateAction<IOptionState>>;
 }) => {
   const setDesiredRepayment = (value: string) => {
-    setState((prev: Record<string, unknown>) => ({
+    setState((prev: IOptionState) => ({
       ...prev,
       desired_repayment_delay: value,
     }));
@@ -52,7 +52,7 @@ const OptionList = ({
       value = Number.isNaN(value) ? undefined : value;
     }
 
-    setState((prev: Record<string, unknown>) => {
+    setState((prev: IOptionState) => {
       const newState = {
         ...prev,
         [targetName]: value,
@@ -69,39 +69,31 @@ const OptionList = ({
     activeThumb: number,
   ) => {
     const rr = getRepaymentRate(
-      state.revenue_amount as number,
-      value as number,
+      state.revenue_amount,
+      Array.isArray(value) ? value[0] : value,
     );
     if (config && rr) {
       if (rr < parseFloat(config.revenue_percentage_min.value)) return;
       if (rr > parseFloat(config.revenue_percentage_max.value)) return;
     }
-    setState((prev: Record<string, unknown>) => ({
+    setState((prev: IOptionState) => ({
       ...prev,
-      loan_amount: value,
+      loan_amount: Array.isArray(value) ? value[0] : value,
     }));
   };
 
   const repaymentRate = getRepaymentRateInString(
-    state.revenue_amount as number,
-    state.loan_amount as number,
+    state.revenue_amount,
+    state.loan_amount,
   );
 
-  const revenueAmount = formatNumber(state.revenue_amount as number);
-  const loanAmount = formatNumber(state.loan_amount as number);
+  const revenueAmount = formatNumber(state.revenue_amount);
+  const loanAmount = formatNumber(state.loan_amount);
 
-  const loanAmountMin = getLoanAmountMin(
-    state.revenue_amount as number | undefined,
-    config,
-  );
-  const loanAmountMax = getLoanAmountMax(
-    state.revenue_amount as number | undefined,
-    config,
-  );
+  const loanAmountMin = getLoanAmountMin(state.revenue_amount, config);
+  const loanAmountMax = getLoanAmountMax(state.revenue_amount, config);
 
-  const sliderAmount = (
-    state.loan_amount ? state.loan_amount : loanAmountMin
-  ) as number;
+  const sliderAmount = state.loan_amount ? state.loan_amount : loanAmountMin;
 
   return (
     <Paper

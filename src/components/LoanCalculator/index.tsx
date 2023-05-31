@@ -6,7 +6,7 @@ import OptionList from './OptionList';
 import ResultView from './ResultView';
 import { LOAN_CONFIG_URL } from '../../configs';
 
-import { IConfig, ILoanConfig } from '../../types';
+import { IConfig, ILoanConfig, IOptionState } from '../../types';
 import {
   getRevenueSharedFrequencyOptions,
   getDesiredRepaymentDelayOptions,
@@ -15,7 +15,7 @@ import {
 
 const LoanCalculator = () => {
   const [loanConfig, setLoanConfig] = useState<ILoanConfig | undefined>();
-  const [state, setState] = useState<Record<string, unknown>>({});
+  const [state, setState] = useState<IOptionState>({});
 
   useEffect(() => {
     fetch(LOAN_CONFIG_URL)

@@ -7,3 +7,10 @@ export type IConfig = {
 };
 
 export type ILoanConfig = Record<string, IConfig>;
+
+export type IOptionState = {
+  revenue_amount?: number;
+  loan_amount?: number;
+  revenue_shared_frequency?: string;
+  desired_repayment_delay?: string;
+}
