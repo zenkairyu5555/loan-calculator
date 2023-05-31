@@ -13,15 +13,7 @@ import SelectVariants from '../SelectVariants';
 import BinIcon from '../../icons/Bin';
 import AddIcon from '../../icons/Add';
 import theme from '../../theme';
-
-const purposeOptions = [
-  'Marketing',
-  'Personnel',
-  'Working Capital',
-  'Inventory',
-  'Machinery/Equipment',
-  'Other',
-];
+import { formatNumber } from '../../utils';
 
 type IPurpose = {
   id: number;
@@ -37,15 +29,17 @@ const StyledTypography = styled(Typography)(() => ({
 }));
 
 const StyledStack = styled(Stack)(() => ({
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
   [theme.breakpoints.down(700)]: {
     width: '100%',
   },
 }));
 
-const FundPurposeList = () => {
-  const [purposeValue, setPurposeValue] = useState<string>();
+const FundPurposeList = ({ options }: { options: string[] }) => {
+  const [purposeValue, setPurposeValue] = useState<string>(options[0]);
   const [description, setDescription] = useState<string>('');
-  const [amount, setAmount] = useState<number>();
+  const [amount, setAmount] = useState<number | undefined>();
   const [purposes, setPurposes] = useState<IPurpose[]>([]);
 
   const handleAdd = () => {
@@ -60,7 +54,12 @@ const FundPurposeList = () => {
   };
 
   const handleAmount = (event: ChangeEvent<HTMLInputElement>) => {
-    setAmount(parseInt(event.target.value));
+    let value: any = event.target.value;
+    value = value.replace(/\D/g, '');
+    value = parseInt(value);
+    value = Number.isNaN(value) ? undefined : value;
+
+    setAmount(value);
   };
 
   const handleDescription = (event: ChangeEvent<HTMLInputElement>) => {
@@ -95,7 +94,7 @@ const FundPurposeList = () => {
         }}
       >
         <SelectVariants
-          options={purposeOptions}
+          options={options}
           value={purposeValue}
           setValue={setPurposeValue}
           sx={{
@@ -120,8 +119,7 @@ const FundPurposeList = () => {
         />
         <TextField
           variant="filled"
-          type="number"
-          value={amount}
+          value={formatNumber(amount)}
           onChange={handleAmount}
           placeholder="Amount"
           sx={{
@@ -175,7 +173,7 @@ const FundPurposeList = () => {
               }}
             >
               <StyledTypography variant="body1">
-                {p.description}
+                {`$${formatNumber(p.amount)}`}
               </StyledTypography>
             </StyledStack>
             <IconButton

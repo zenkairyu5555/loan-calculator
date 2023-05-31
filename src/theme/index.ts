@@ -39,10 +39,24 @@ const theme: Theme = createTheme({
           '&.Mui-disabled:before': {
             borderBottom: 'none !important',
           },
+          '& .MuiInputAdornment-root': {
+            '& .MuiTypography-root': {
+              color: '#000000',
+              fontWeight: 600,
+              fontSize: '1.125rem',
+              lineHeight: '1.125rem',
+            },
+          },
         },
+
         input: {
           '&.MuiInputBase-input': {
+            fontSize: '1.125rem',
+            fontWeight: 600,
             padding: '0px 9px 0px 9px !important',
+            '&.MuiInputBase-inputAdornedStart': {
+              paddingLeft: '0px !important',
+            },
           },
           '&.Mui-disabled': {
             textFillColor: 'unset',
@@ -120,6 +134,13 @@ const theme: Theme = createTheme({
             fontWeight: 500,
             lineHeight: '18px',
           },
+        },
+      },
+    },
+    MuiInputAdornment: {
+      styleOverrides: {
+        root: {
+          marginTop: '0 !important',
         },
       },
     },

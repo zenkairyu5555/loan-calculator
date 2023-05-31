@@ -1,13 +1,17 @@
-import {
-  Box,
-  FormGroup,
-  Paper,
-  Typography,
-} from '@mui/material';
+import { useMemo } from 'react';
+import { Box, FormGroup, Paper, Typography } from '@mui/material';
 import Divider from '@mui/material/Divider';
 import styled from '@emotion/styled';
 import theme from '../../theme';
 import PanelTitle from '../PanelTitle';
+import {
+  formatInDollar,
+  getFee,
+  getTotalRevenueShare,
+  getTransfers,
+  getCompletionDate,
+} from '../../utils';
+import { ILoanConfig } from '../../types';
 
 const StyledTypography = styled(Typography)(() => ({
   fontSize: '22px',
@@ -23,16 +27,53 @@ const StyledTypography = styled(Typography)(() => ({
   },
 }));
 
-const ResultView = () => {
+const ResultView = ({
+  state,
+  config,
+}: {
+  state: Record<string, unknown>;
+  config: ILoanConfig | undefined;
+}) => {
+  const revenueAmount = formatInDollar(state.revenue_amount as number);
+  const loanAmount = formatInDollar(state.loan_amount as number);
+  const fee = formatInDollar(getFee(state.loan_amount as number, config));
+  const feePercentage =
+    config && Number.isFinite(parseFloat(config.desired_fee_percentage.value))
+      ? parseFloat(config.desired_fee_percentage.value)
+      : '';
+  const totalRevenueShare = formatInDollar(
+    getTotalRevenueShare(state.loan_amount as number, config),
+  );
+
+
+  const transfers = useMemo(
+    () =>
+      getTransfers(
+        state.revenue_amount as number,
+        state.loan_amount as number,
+        state.revenue_shared_frequency as string,
+        config,
+      ),
+    [state, config],
+  );
+
+  const completionDate = getCompletionDate(
+    state.revenue_amount as number,
+    state.loan_amount as number,
+    state.revenue_shared_frequency as string,
+    state.desired_repayment_delay as string,
+    config,
+  );
+
   return (
     <Paper
       elevation={1}
       sx={{
         flex: 1,
-        padding: '0px 80px',
+        padding: '0px 60px',
         borderRadius: '20px',
         backgroundColor: '#FFFFFFCC',
-        boxShadow: '0px 3px 20px 6px rgba(0, 0, 0, 0.02)',
+        boxShadow: '0px 3px 20px 6px #00000003',
         [theme.breakpoints.down(1500)]: {
           padding: '0px 60px',
         },
@@ -56,7 +97,7 @@ const ResultView = () => {
           }}
         >
           <StyledTypography>Annual Business Revenue</StyledTypography>
-          <StyledTypography>$250,000</StyledTypography>
+          <StyledTypography>{revenueAmount}</StyledTypography>
         </FormGroup>
         <FormGroup
           sx={{
@@ -67,7 +108,7 @@ const ResultView = () => {
           }}
         >
           <StyledTypography>Funding Amount</StyledTypography>
-          <StyledTypography>$60,000</StyledTypography>
+          <StyledTypography>{loanAmount}</StyledTypography>
         </FormGroup>
         <FormGroup
           sx={{
@@ -78,7 +119,9 @@ const ResultView = () => {
           }}
         >
           <StyledTypography>Fees</StyledTypography>
-          <StyledTypography>(50%)$30,000</StyledTypography>
+          <StyledTypography>
+            ({feePercentage}%) {fee}
+          </StyledTypography>
         </FormGroup>
         <Divider variant="middle" />
         <FormGroup
@@ -90,7 +133,7 @@ const ResultView = () => {
           }}
         >
           <StyledTypography>Total Revenue Share</StyledTypography>
-          <StyledTypography>$90,000</StyledTypography>
+          <StyledTypography>{totalRevenueShare}</StyledTypography>
         </FormGroup>
         <FormGroup
           sx={{
@@ -101,7 +144,7 @@ const ResultView = () => {
           }}
         >
           <StyledTypography>Expected transfer</StyledTypography>
-          <StyledTypography>47</StyledTypography>
+          <StyledTypography>{transfers}</StyledTypography>
         </FormGroup>
         <FormGroup
           sx={{
@@ -112,7 +155,7 @@ const ResultView = () => {
         >
           <StyledTypography>Expected Completion date</StyledTypography>
           <StyledTypography sx={{ color: '#0962EA' }}>
-            January 24, 2023
+            {completionDate}
           </StyledTypography>
         </FormGroup>
       </Box>
